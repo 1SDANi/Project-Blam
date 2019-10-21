@@ -9,10 +9,14 @@ var sLookUp : String = "game_look_up"
 var sLookDown : String = "game_look_down"
 var sLookLeft : String = "game_look_left"
 var sLookRight : String = "game_look_right"
+var sEscape : String = "ui_end"
 
 
 
 func _input(event):
+	if (event.is_action_pressed(sEscape)):
+		get_tree().quit()
+	
 	if event is InputEventMouseButton or event is InputEventJoypadMotion:
 		if event.get_action_strength(sShoot) == 1:
 			shoot()
