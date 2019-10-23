@@ -1,0 +1,18 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/ArcaneBattleRifle.obj-df5e59ec1049f8725b5a44d09c805164.mesh"
+
+[deps]
+
+files=[ "res://.import/ArcaneBattleRifle.obj-df5e59ec1049f8725b5a44d09c805164.mesh" ]
+
+source_file="res://Models/ArcaneBattleRifle.obj"
+dest_files=[ "res://.import/ArcaneBattleRifle.obj-df5e59ec1049f8725b5a44d09c805164.mesh", "res://.import/ArcaneBattleRifle.obj-df5e59ec1049f8725b5a44d09c805164.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true
