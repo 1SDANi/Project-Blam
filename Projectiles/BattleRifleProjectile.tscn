@@ -1,0 +1,91 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://Projectiles/BattleRifleProjectile.gd" type="Script" id=1]
+
+[sub_resource type="OpenSimplexNoise" id=1]
+octaves = 6
+period = 175.0
+persistence = 0.75
+lacunarity = 1.5
+
+[sub_resource type="NoiseTexture" id=2]
+seamless = true
+noise = SubResource( 1 )
+
+[sub_resource type="OpenSimplexNoise" id=3]
+period = 50.0
+persistence = 0.75
+lacunarity = 1.75
+
+[sub_resource type="NoiseTexture" id=4]
+noise = SubResource( 3 )
+
+[sub_resource type="OpenSimplexNoise" id=5]
+octaves = 1
+period = 75.0
+persistence = 0.6
+lacunarity = 1.75
+
+[sub_resource type="NoiseTexture" id=6]
+seamless = true
+noise = SubResource( 5 )
+
+[sub_resource type="OpenSimplexNoise" id=7]
+period = 75.0
+persistence = 0.75
+lacunarity = 2.25
+
+[sub_resource type="NoiseTexture" id=8]
+seamless = true
+noise = SubResource( 7 )
+
+[sub_resource type="SpatialMaterial" id=9]
+flags_transparent = true
+params_diffuse_mode = 3
+params_specular_mode = 2
+albedo_color = Color( 1, 0, 0, 0.752941 )
+albedo_texture = SubResource( 2 )
+metallic = 0.5
+roughness = 0.25
+emission_enabled = true
+emission = Color( 1, 0, 0, 1 )
+emission_energy = 0.5
+emission_operator = 0
+emission_on_uv2 = false
+normal_enabled = true
+normal_scale = 0.75
+normal_texture = SubResource( 8 )
+ao_enabled = true
+ao_light_affect = 0.0
+ao_texture = SubResource( 4 )
+ao_on_uv2 = false
+ao_texture_channel = 0
+depth_enabled = true
+depth_scale = 1.0
+depth_deep_parallax = false
+depth_flip_tangent = true
+depth_flip_binormal = true
+depth_texture = SubResource( 6 )
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 1.0
+
+[sub_resource type="SphereMesh" id=10]
+material = SubResource( 9 )
+
+[sub_resource type="SphereShape" id=11]
+
+[node name="Projectile" type="Area"]
+gravity_vec = Vector3( 0, 0, 0 )
+gravity = 0.0
+linear_damp = 0.0
+angular_damp = 0.0
+script = ExtResource( 1 )
+pCollider = NodePath("CollisionShape")
+pMesh = NodePath("MeshInstance")
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 10 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 11 )
