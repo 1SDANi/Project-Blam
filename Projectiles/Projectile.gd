@@ -1,14 +1,16 @@
 extends Area
 
-const Entity = preload("Entity.gd")
+const Entity = preload("../Entity.gd")
 export (NodePath) var pCollider : NodePath
 export (NodePath) var pMesh : NodePath
-var cCollision : KinematicCollision
 var nCollider : CollisionShape
 var nMesh : MeshInstance
+var nOwner : Entity
 var vVelocity : Vector3
 var fInitialVelocity : float = 0.5
-var fAcceleration : float = 0
+var fAccelerateDuration : float = 0.0
+var fAcceleration : float = 0.0
+var fAccelerateTime : float = -1
 var fDamage : float = 10
 var fRadius : float = 1
 var fLife : float = 10
@@ -20,22 +22,33 @@ func _ready():
 	connect("body_entered", self, "_on_body_entered")
 	
 func on_spawn():
+	after_spawn()
+	
+func after_spawn():
 	vVelocity = get_trajectory() * fInitialVelocity
 	nCollider.get_shape().set_radius(fRadius)
 	nMesh.get_mesh().set_radius(fRadius)
 	nMesh.get_mesh().set_height(fRadius * 2)
 
 func _physics_process(delta : float):
-	vVelocity += get_trajectory() * fAcceleration
-	set_translation(get_translation() + transform.basis.xform(vVelocity))
+	if (fAccelerateTime >= 0 and fAccelerateTime < fAccelerateDuration):
+		
+		
+		if fAccelerateTime + delta < fAccelerateDuration:
+			vVelocity += get_trajectory() * fAcceleration * delta
+			fAccelerateTime += delta
+		else:
+			vVelocity += get_trajectory() * fAcceleration * (fAccelerateDuration - fAccelerateTime)
+			fAccelerateTime = fAccelerateDuration
+	set_translation(get_translation() + transform.basis.xform(vVelocity) * delta)
 	fLife -= delta
 	if fLife <= 0:
 		queue_free()
 		
 func _on_body_entered(body):
-	if body is Entity:
+	if body is Entity and body != nOwner:
 		body.damage(fDamage)
-	queue_free()
+		queue_free()
 	
 func get_trajectory():
 	return Vector3.FORWARD.normalized()

@@ -1,6 +1,5 @@
 extends "Entity.gd"
 
-var sProjectile = preload("Projectile.tscn")
 var nLook : Node
 var nHands : Node
 export (float) var fRotateSpeed : float = 0.05
@@ -11,26 +10,32 @@ export (float) var fGroundSpeed: float
 export (float) var fAirSpeed: float 
 var vMoveLook : Vector2 = Vector2.ZERO
 var vMotion : Vector3 = Vector3.ZERO
+var oBattleRifle = preload("Guns/BattleRifle.gd")
+var oMachinePistol = preload("Guns/MachinePistol.gd")
+var oPrimaryWeapon
+var oSecondaryWeapon
 
 func _ready():
 	nLook = get_node(pLook)
 	nHands = get_node(pHands)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	oPrimaryWeapon = oBattleRifle.new(self)
+	oSecondaryWeapon = oMachinePistol.new(self)
 
 func _physics_process(delta : float):
 	move_camera(delta)
 	apply_movement()
-	
-func shoot():
-	var nProjectile = sProjectile.instance()
-	nWorld.add_child(nProjectile)
-	nProjectile.fRadius = 0.25
-	nProjectile.set_rotation(get_rotation() + nLook.get_rotation())
-	nProjectile.on_spawn()
-	nProjectile.set_translation(nHands.get_global_transform().origin + get_rotation().normalized() * nProjectile.nCollider.get_shape().get_radius())
+	oPrimaryWeapon.process(delta)
+	oSecondaryWeapon.process(delta)
 	
 func jump():
 	vVelocity.y += fJumpStrength
+	
+func swap_weapons():
+	var oNewPrimary = oSecondaryWeapon
+	oSecondaryWeapon = oPrimaryWeapon
+	oPrimaryWeapon = oNewPrimary
+	oSecondaryWeapon.trigger_up()
 	
 func apply_movement():
 	if isGrounded():
