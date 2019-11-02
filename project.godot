@@ -8,9 +8,32 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "KinematicBody",
+"class": "Entity",
+"language": "GDScript",
+"path": "res://Entities/Entity.gd"
+}, {
+"base": "",
+"class": "MachinePistol",
+"language": "GDScript",
+"path": "res://Entities/PersonController.gd"
+}, {
+"base": "Area",
+"class": "Projectile",
+"language": "GDScript",
+"path": "res://Projectiles/Projectile.gd"
+}, {
+"base": "Area",
+"class": "Weakpoint",
+"language": "GDScript",
+"path": "res://Entities/Weakpoint.gd"
+} ]
 _global_script_class_icons={
-
+"Entity": "",
+"MachinePistol": "",
+"Projectile": "",
+"Weakpoint": ""
 }
 
 [application]
@@ -18,6 +41,10 @@ _global_script_class_icons={
 config/name="Project Blam"
 run/main_scene="res://World.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Constants="*res://Constants.gd"
 
 [input]
 

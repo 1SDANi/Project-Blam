@@ -1,6 +1,6 @@
 extends Area
+class_name Projectile
 
-const Entity = preload("../Entity.gd")
 export (NodePath) var pCollider : NodePath
 export (NodePath) var pMesh : NodePath
 var nCollider : CollisionShape
@@ -11,7 +11,10 @@ var fInitialVelocity : float = 0.5
 var fAccelerateDuration : float = 0.0
 var fAcceleration : float = 0.0
 var fAccelerateTime : float = -1
-var fDamage : float = 10
+var fDamage : float = 20
+var fCrit : float = 35
+var bDamageIsPercent : bool = false
+var bCritIsPercent : bool = false
 var fRadius : float = 1
 var fLife : float = 10
 
@@ -47,7 +50,10 @@ func _physics_process(delta : float):
 		
 func _on_body_entered(body):
 	if body is Entity and body != nOwner:
-		body.damage(fDamage)
+		if body.bHasWeakpoint and overlaps_area(body.nWeakpoint):
+			body.damage(fCrit, bCritIsPercent)
+		else:
+			body.damage(fDamage, bDamageIsPercent)
 		queue_free()
 	
 func get_trajectory():

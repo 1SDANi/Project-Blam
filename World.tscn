@@ -1,17 +1,16 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=21 format=2]
 
-[ext_resource path="res://World.gd" type="Script" id=1]
-[ext_resource path="res://PlayerController.gd" type="Script" id=2]
-[ext_resource path="res://checkerboard_blue.tres" type="Material" id=3]
-[ext_resource path="res://Textures/BattleRifle.tres" type="ArrayMesh" id=4]
-[ext_resource path="res://Models/ArcaneRunes.tres" type="Material" id=5]
-[ext_resource path="res://TurretController.gd" type="Script" id=6]
+[ext_resource path="res://Entities/PlayerController.gd" type="Script" id=1]
+[ext_resource path="res://Textures/BattleRifle.tres" type="ArrayMesh" id=2]
+[ext_resource path="res://Models/ArcaneRunes.tres" type="Material" id=3]
+[ext_resource path="res://checkerboard_blue.tres" type="Material" id=4]
+[ext_resource path="res://Entities/Weakpoint.gd" type="Script" id=5]
+[ext_resource path="res://Entities/TurretController.gd" type="Script" id=6]
 [ext_resource path="res://checkerboard_green.tres" type="Material" id=7]
 
 [sub_resource type="CapsuleShape" id=1]
 
-[sub_resource type="CapsuleMesh" id=2]
-material = ExtResource( 3 )
+[sub_resource type="SphereShape" id=2]
 
 [sub_resource type="ProceduralSky" id=3]
 sky_top_color = Color( 0.839216, 0.917647, 0.980392, 1 )
@@ -32,73 +31,97 @@ dof_blur_far_amount = 0.05
 dof_blur_far_quality = 2
 glow_enabled = true
 
-[sub_resource type="CubeMesh" id=5]
-size = Vector3( 2, 4, 2 )
+[sub_resource type="SphereMesh" id=5]
+material = ExtResource( 4 )
 
-[sub_resource type="BoxShape" id=6]
-extents = Vector3( 1, 2, 1 )
+[sub_resource type="CapsuleMesh" id=6]
+material = ExtResource( 4 )
 
-[sub_resource type="BoxShape" id=7]
-extents = Vector3( 100, 0.125, 100 )
+[sub_resource type="CubeMesh" id=7]
+size = Vector3( 2, 3, 2 )
 
 [sub_resource type="BoxShape" id=8]
-extents = Vector3( 4, 0.06, 8 )
+extents = Vector3( 1, 1.5, 1 )
 
 [sub_resource type="ConvexPolygonShape" id=9]
+points = PoolVector3Array( 0, -0.75, 1, 0, -0.75, -1, 1, 0.75, 1, 1, 0.75, -1, -1, 0.75, -1, -1, 0.75, 1 )
+
+[sub_resource type="PrismMesh" id=10]
+
+[sub_resource type="BoxShape" id=11]
+extents = Vector3( 100, 0.125, 100 )
+
+[sub_resource type="BoxShape" id=12]
+extents = Vector3( 4, 0.06, 8 )
+
+[sub_resource type="ConvexPolygonShape" id=13]
 points = PoolVector3Array( -4, 0.75, 8, -4, 0.75, -8, -4, 0.75, 8, -4, 0.75, -8, -4, -0.75, 8, 4, -0.75, -8, 4, -0.75, 8, -4, -0.75, -8, -4, 0.75, 8, -4, 0.75, -8, -4, 0.75, -8, -4, 0.75, 8, 4, -0.75, 8, -4, -0.75, -8, 4, -0.75, -8, -4, -0.75, 8, -4, -0.75, 8, 4, -0.75, 8, -4, -0.75, -8, 4, -0.75, -8 )
 
 [node name="World" type="Spatial"]
-script = ExtResource( 1 )
-fGravity = 0.98
 
 [node name="Player" type="KinematicBody" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
-script = ExtResource( 2 )
-pWorld = NodePath("..")
-fMass = 1.2
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0 )
+script = ExtResource( 1 )
+fMass = 1.5
 fGroundFriction = 0.1
-fAirFriction = 0.1
+fAirFriction = 0.05
+pWeakpoint = NodePath("HeadShape/HeadArea")
 fJumpStrength = 25.0
-pLook = NodePath("Camera")
-pHands = NodePath("Camera/Hands")
-fGroundSpeed = 3.0
-fAirSpeed = 3.0
+pLook = NodePath("HeadShape")
+pHands = NodePath("HeadShape/Camera/Hands")
+fGroundSpeed = 4.0
+fAirSpeed = 2.0
 
-[node name="Body" type="CollisionShape" parent="Player"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0.569061, -0.0219946, -1.464 )
+[node name="BodyShape" type="CollisionShape" parent="Player"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0, 0 )
 shape = SubResource( 1 )
 
-[node name="MeshInstance" type="MeshInstance" parent="Player"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0, 0 )
-mesh = SubResource( 2 )
-material/0 = null
+[node name="HeadShape" type="CollisionShape" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0 )
+shape = SubResource( 2 )
 
-[node name="Camera" type="Camera" parent="Player"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -1.1 )
+[node name="Camera" type="Camera" parent="Player/HeadShape"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -1.1 )
 environment = SubResource( 4 )
 
-[node name="Hands" type="Spatial" parent="Player/Camera"]
+[node name="Hands" type="Spatial" parent="Player/HeadShape/Camera"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.9 )
 
-[node name="ArcaneBattleRifle" type="MeshInstance" parent="Player/Camera/Hands"]
+[node name="ArcaneBattleRifle" type="MeshInstance" parent="Player/HeadShape/Camera/Hands"]
 transform = Transform( 0.0651905, 0, -0.325891, 0, 0.332347, 0, 0.325891, 0, 0.0651905, 0.891711, -0.961147, 0 )
-mesh = ExtResource( 4 )
+mesh = ExtResource( 2 )
 material/0 = null
 material/1 = null
 material/2 = null
-material/3 = ExtResource( 5 )
-material/4 = ExtResource( 5 )
-material/5 = ExtResource( 5 )
-material/6 = ExtResource( 5 )
-material/7 = ExtResource( 5 )
+material/3 = ExtResource( 3 )
+material/4 = ExtResource( 3 )
+material/5 = ExtResource( 3 )
+material/6 = ExtResource( 3 )
+material/7 = ExtResource( 3 )
 material/8 = null
+
+[node name="HeadMesh" type="MeshInstance" parent="Player/HeadShape"]
+mesh = SubResource( 5 )
+material/0 = null
+
+[node name="HeadArea" type="Area" parent="Player/HeadShape"]
+gravity_vec = Vector3( 0, 0, 0 )
+gravity = 0.0
+script = ExtResource( 5 )
+
+[node name="HeadShape" type="CollisionShape" parent="Player/HeadShape/HeadArea"]
+transform = Transform( 1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0 )
+shape = SubResource( 2 )
+disabled = true
+
+[node name="BodyMesh" type="MeshInstance" parent="Player"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0, 0 )
+mesh = SubResource( 6 )
+material/0 = null
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0 )
 shadow_enabled = true
-
-[node name="CSGCombiner" type="CSGCombiner" parent="."]
-use_collision = true
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 anchor_right = 1.0
@@ -134,32 +157,49 @@ color = Color( 1, 0, 0, 1 )
 polygon = PoolVector2Array( 0, 5, 5, 0, 3, 0, 0, 3 )
 
 [node name="Dummy" type="KinematicBody" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2.5, 10 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 10 )
 script = ExtResource( 6 )
-pWorld = NodePath("..")
-pLook = NodePath("Look")
-pHands = NodePath("Look/Hands")
+pWeakpoint = NodePath("HeadShape/Head")
+pLook = NodePath("HeadShape/Look")
+pHands = NodePath("HeadShape/Look/Hands")
 pTarget = NodePath("../Player")
 
-[node name="MeshInstance" type="MeshInstance" parent="Dummy"]
-mesh = SubResource( 5 )
+[node name="BodyMesh" type="MeshInstance" parent="Dummy"]
+mesh = SubResource( 7 )
 material/0 = null
 
-[node name="CollisionShape" type="CollisionShape" parent="Dummy"]
-shape = SubResource( 6 )
+[node name="BodyShape" type="CollisionShape" parent="Dummy"]
+shape = SubResource( 8 )
 
-[node name="Look" type="Spatial" parent="Dummy"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -1.1 )
+[node name="HeadShape" type="CollisionShape" parent="Dummy"]
+transform = Transform( 1, 0, 0, 0, 0.75, 0, 0, 0, 1, 0, 2.25, 0 )
+shape = SubResource( 9 )
 
-[node name="Hands" type="Spatial" parent="Dummy/Look"]
+[node name="Head" type="Area" parent="Dummy/HeadShape"]
+transform = Transform( 1, 0, 0, 0, 1.33333, 0, 0, 0, 1, 0, 0, 0 )
+gravity_vec = Vector3( 0, 0, 0 )
+gravity = 0.0
+script = ExtResource( 5 )
+
+[node name="HeadShape" type="CollisionShape" parent="Dummy/HeadShape/Head"]
+transform = Transform( 1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0 )
+shape = SubResource( 9 )
+
+[node name="HeadMesh" type="MeshInstance" parent="Dummy/HeadShape"]
+transform = Transform( -1, 6.55671e-008, 0, -1.16564e-007, -1, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 10 )
+material/0 = null
+
+[node name="Look" type="Spatial" parent="Dummy/HeadShape"]
+transform = Transform( 1, 0, 0, 0, 1.33333, 0, 0, 0, 1, 10, -1.66667, 8.9 )
+
+[node name="Hands" type="Spatial" parent="Dummy/HeadShape/Look"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.9 )
-
-[node name="Tween" type="Tween" parent="Dummy"]
 
 [node name="StaticBody" type="StaticBody" parent="."]
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
-shape = SubResource( 7 )
+shape = SubResource( 11 )
 
 [node name="CSGBox" type="CSGBox" parent="StaticBody"]
 width = 200.0
@@ -182,8 +222,8 @@ material = ExtResource( 7 )
 
 [node name="CollisionShape2" type="CollisionShape" parent="StaticBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0.19, 0 )
-shape = SubResource( 8 )
+shape = SubResource( 12 )
 
 [node name="CollisionShape3" type="CollisionShape" parent="StaticBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 1, 0 )
-shape = SubResource( 9 )
+shape = SubResource( 13 )

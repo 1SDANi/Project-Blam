@@ -5,6 +5,7 @@ var nTarget : Node
 
 func _ready():
 	nTarget = get_node(pTarget)
+	bHasWeakpoint = true
 
 func _physics_process(delta):
 	var vRotation = get_rotation()

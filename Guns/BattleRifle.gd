@@ -6,4 +6,4 @@ func _init(weilder).(weilder):
 	fCooldown = 1.0
 	fRecharge = 2.0
 	fMaxHoldTime = 0.0
-	sProjectile = preload("../Projectiles/BattleRifleProjectile.tscn")
+	sProjectile = Constants.BattleRifleProjectile
