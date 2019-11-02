@@ -12,15 +12,15 @@
 
 [sub_resource type="SphereShape" id=2]
 
-[sub_resource type="ProceduralSky" id=4]
+[sub_resource type="ProceduralSky" id=3]
 sky_top_color = Color( 0.839216, 0.917647, 0.980392, 1 )
 sky_horizon_color = Color( 0.647059, 0.839216, 0.945098, 1 )
 ground_bottom_color = Color( 0.47451, 0.760784, 0.917647, 1 )
 ground_horizon_color = Color( 0.647059, 0.839216, 0.945098, 1 )
 
-[sub_resource type="Environment" id=5]
+[sub_resource type="Environment" id=4]
 background_mode = 2
-background_sky = SubResource( 4 )
+background_sky = SubResource( 3 )
 fog_enabled = true
 auto_exposure_scale = 0.6
 ss_reflections_enabled = true
@@ -31,7 +31,7 @@ dof_blur_far_amount = 0.05
 dof_blur_far_quality = 2
 glow_enabled = true
 
-[sub_resource type="SphereMesh" id=3]
+[sub_resource type="SphereMesh" id=5]
 material = ExtResource( 4 )
 
 [sub_resource type="CapsuleMesh" id=6]
@@ -43,10 +43,10 @@ size = Vector3( 2, 3, 2 )
 [sub_resource type="BoxShape" id=8]
 extents = Vector3( 1, 1.5, 1 )
 
-[sub_resource type="ConvexPolygonShape" id=10]
+[sub_resource type="ConvexPolygonShape" id=9]
 points = PoolVector3Array( 0, -0.75, 1, 0, -0.75, -1, 1, 0.75, 1, 1, 0.75, -1, -1, 0.75, -1, -1, 0.75, 1 )
 
-[sub_resource type="PrismMesh" id=9]
+[sub_resource type="PrismMesh" id=10]
 
 [sub_resource type="BoxShape" id=11]
 extents = Vector3( 100, 0.125, 100 )
@@ -64,13 +64,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0 )
 script = ExtResource( 1 )
 fMass = 1.5
 fGroundFriction = 0.1
-fAirFriction = 0.1
+fAirFriction = 0.05
 pWeakpoint = NodePath("HeadShape/HeadArea")
 fJumpStrength = 25.0
 pLook = NodePath("HeadShape")
 pHands = NodePath("HeadShape/Camera/Hands")
-fGroundSpeed = 3.0
-fAirSpeed = 3.0
+fGroundSpeed = 4.0
+fAirSpeed = 2.0
 
 [node name="BodyShape" type="CollisionShape" parent="Player"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 0, 0 )
@@ -82,7 +82,7 @@ shape = SubResource( 2 )
 
 [node name="Camera" type="Camera" parent="Player/HeadShape"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -1.1 )
-environment = SubResource( 5 )
+environment = SubResource( 4 )
 
 [node name="Hands" type="Spatial" parent="Player/HeadShape/Camera"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.9 )
@@ -101,7 +101,7 @@ material/7 = ExtResource( 3 )
 material/8 = null
 
 [node name="HeadMesh" type="MeshInstance" parent="Player/HeadShape"]
-mesh = SubResource( 3 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="HeadArea" type="Area" parent="Player/HeadShape"]
@@ -173,7 +173,7 @@ shape = SubResource( 8 )
 
 [node name="HeadShape" type="CollisionShape" parent="Dummy"]
 transform = Transform( 1, 0, 0, 0, 0.75, 0, 0, 0, 1, 0, 2.25, 0 )
-shape = SubResource( 10 )
+shape = SubResource( 9 )
 
 [node name="Head" type="Area" parent="Dummy/HeadShape"]
 transform = Transform( 1, 0, 0, 0, 1.33333, 0, 0, 0, 1, 0, 0, 0 )
@@ -183,11 +183,11 @@ script = ExtResource( 5 )
 
 [node name="HeadShape" type="CollisionShape" parent="Dummy/HeadShape/Head"]
 transform = Transform( 1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0, 0 )
-shape = SubResource( 10 )
+shape = SubResource( 9 )
 
 [node name="HeadMesh" type="MeshInstance" parent="Dummy/HeadShape"]
 transform = Transform( -1, 6.55671e-008, 0, -1.16564e-007, -1, 0, 0, 0, 1, 0, 0, 0 )
-mesh = SubResource( 9 )
+mesh = SubResource( 10 )
 material/0 = null
 
 [node name="Look" type="Spatial" parent="Dummy/HeadShape"]

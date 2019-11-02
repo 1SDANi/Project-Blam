@@ -1,7 +1,7 @@
 extends "Projectile.gd"
 
 func on_spawn():
-	fInitialVelocity = 27 * 1
+	fInitialVelocity = 1 * Constants.fProjectileSpeedMultiplier
 	fDamage = 20
 	fCrit = 35
 	fRadius = 1
